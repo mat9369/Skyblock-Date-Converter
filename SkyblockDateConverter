@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8"/>
+    <title>Skyblock-Date-Converter</title>
+    <style>
+        label {
+            display: block;
+        }
+
+        input {
+            width: 60px;
+        }
+
+        table,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <label>
+        Date in game(YYY-MM-DD):
+        <input type="number" placeholder="Year" id="year" min="1">/<input type="number" placeholder="Month" id="month" min="1" max="12">/<input type="number" placeholder="Day" id="day" min="1" max="31">
+    </label>
+    <label><button onclick="gameTimeToRealTime()">Calculate</button></label>
+    <label>Date in reality(Timestamp): <span id="TimeStamp"></span></label>
+    <label>Date in reality(ISO8601(UTC)):<span id="ISO8601"></span></label>
+    <label>Date in reality(Your Time zone):<span id="TimeZone"></span></label>
+    <label>Your current time:<span id="now"></span></label>
+
+    <table>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>Early Spring</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Spring</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Late Spring</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>Early Summer</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>Summer</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>Late Summer</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>Early Autumn</td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>Autumn</td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>Late Autumn</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>Early Winter</td>
+            </tr>
+            <tr>
+                <td>11</td>
+                <td>Winter</td>
+            </tr>
+            <tr>
+                <td>12</td>
+                <td>Late Winter</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        function get(name) {
+            return Number(document.getElementById(name).value);
+        }
+        function set(name, data) {
+            document.getElementById(name).textContent = data;
+        }
+        function gameTimeToRealTime() {
+            if (get("year") && get("month") && get("day")) {
+                const GAME_DAY = 20 * 60;
+                const GAME_MONTH = GAME_DAY * 31;
+                const GAME_YEAR = GAME_MONTH * 12;
+                // 1st of Early Spring, Year 1(0001/01/01)
+                const SERVER_START_UTC = 1560275700;
+                const SERVER_START_GAME_DATE = GAME_YEAR * 1 + GAME_MONTH * 1 + GAME_DAY * 1;
+                let ms = (SERVER_START_UTC - SERVER_START_GAME_DATE + GAME_DAY * get("day") + GAME_MONTH * get("month") + GAME_YEAR * get("year")) * 1000;
+
+                set("TimeStamp", ms);
+                set("ISO8601", new Date(ms).toISOString());
+                set("TimeZone", new Date(ms).toLocaleString());
+                set("now", new Date().toLocaleString() + "(" + (new Date().getTimezoneOffset() / 60) + "Hour)");
+            } else {
+                alert("Please enter a time.")
+            }
+        }
+    </script>
+</body>
+
+</html>
